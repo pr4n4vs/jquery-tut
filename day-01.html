@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 01</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <!-- Jquery is js library, used for event handling,traversal,animation and AJAx -->
+    <!-- Download Extention jQuery Code Snippets v0.0.1 -->
+    <div class="myclass1">
+        <div class="myclass2">
+            <span></span>
+        </div>
+        <span></span>
+    </div>
+    <script>
+        $(document).ready(function () {
+            //jqdoc 
+
+            // select by element name or tag name
+            $("span")           // select all span tags
+
+            // Select by class name
+            $(".className")  
+
+            /*
+
+                $(".myclass1 .myclass2 span")
+            */
+
+            // Seletc by id 
+            $("#idName")
+
+            $("span .myclass #myid a")
+
+
+            $("#mybutton").click(function(){
+                    alert("button clicked");
+            });
+
+
+            $("#mybutton").click(abc());
+
+
+        }); 
+        function abc(){
+
+        }
+
+    </script>
+</body>
+</html>
