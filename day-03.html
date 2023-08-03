@@ -50,7 +50,7 @@
         function loadData() {
             $.ajax({
                 type: "GET",
-                url: "http://localhost/gadgests/api/products/",
+                url: "https://sandbox.pranavdev.space/gadgets/api/products/",
                 success: function (response) {
                     //   console.log(response);
                     // console.log(response.status)
@@ -92,7 +92,7 @@
                 console.log(pageNo);
                 $.ajax({
                     type: "GET",
-                    url: "http://localhost/gadgests/api/products/",
+                    url: "https://sandbox.pranavdev.space/gadgets/api/products/",
                     data:{page:pageNo},
                     success: function (response) {
                         $('#nxtPage').attr('currPage',pageNo);
