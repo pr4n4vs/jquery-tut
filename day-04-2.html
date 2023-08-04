@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Day 04</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h3>Send Data from API</h3>
+        <hr>
+        <form>
+
+             <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Name</label>
+                <input type="email" class="form-control" id="name" placeholder="Full Name">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea class="form-control" id="description" placeholder="Description" rows="3"></textarea>
+              </div>
+              <span id="msg"></span>
+              <button class="btn btn-primary" type="button" id="submit">Submit</button>
+
+        </form>
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+        <script>
+
+            $(document).on('click', '#submit',function () {
+                var name=$('#name').val();
+                var description=$('#description').val();
+                var search=$('#search').val();
+                if(name!='' && description!=''){
+                    $('#msg').html('');
+                    $.ajax({
+                        type: "POST",
+                        url: "https://sandbox.pranavdev.space/gadgets/api/add-product",
+                        data: {
+                            name:name,
+                            description:description,
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if(response.status=='success'){
+                                $('#msg').html('<p class="text-success">'+response.message+'</p>');
+                            }
+                            else{
+                                ('#msg').html('<p class="text-danger">'+response.message+'</p>');
+                            }
+                            
+                        }
+                    });
+                }
+                else{
+                    if(name==''){
+                        $('#msg').html('<p class="text-danger">Enter your Name</p>');
+                    }
+                    else if(description==''){
+                        $('#msg').html('<p class="text-danger">Enter Description</p>');
+                    }
+                    else{
+                        $('#msg').html('');
+                    }
+
+                }
+            });
+        </script>
+</body>
+</html>
