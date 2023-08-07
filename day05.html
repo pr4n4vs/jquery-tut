@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Load more search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>Data from API</h3>
+            </div>
+            <div class="col-lg-6">
+                <form class="form-inline d-flex justify-content-end">
+                    <input class="form-control me-2" id="search" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="button" id="searchBtn">Search</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <table class="table table-bordered">
+            <thead id="tabHead">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Desc</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="tabData">
+
+            </tbody>
+        </table>
+        <div class="text-center">
+            <button id="nxtPage" type="button" currPage="1" class="btn btn-primary">Load More...</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+        var tabHead = ''; var tabData = '';
+        function loadData() {
+            $.ajax({
+                type: "GET",
+                url: "https://sandbox.pranavdev.space/gadgets/api/products/",
+                success: function (response) {
+
+                    if (response.status == "success") {
+                        var data = response.data;
+                        //  console.log(data);
+
+                        for (var i = 0; i < data.length; i++) {
+                            tabData += '<tr>';
+                            tabData += '<td>' + data[i].id + '</td>';
+                            tabData += '<td>' + data[i].name + '</td>';
+                            if (data[i].image != '') {
+                                tabData += '<td><img src="' + data[i].image + '" height="200px" width="200px"></td>';
+                            }
+                            else {
+                                tabData += '<td>No Image Found</td>';
+                            }
+                            tabData += '<td>' + data[i].description + '</td>';
+                            tabData += '<td>' + data[i].created_at + '</td>';
+                            tabData += '</tr>';
+                        }
+
+                        $('#tabData').html(tabData);
+
+                        var pagination = response.pagination;
+                        // console.log(pagination);
+                        // console.log(pagination.total_pages);
+                        // console.log(pagination.current_page);
+                    }
+                    else{
+                            $('#tabData').html(response.message);
+                        }
+
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadData();
+            $(document).on('click', '#nxtPage', function () {
+                $('#tabData').html('');
+                var pageNo = $(this).attr('currPage');
+                pageNo = parseInt(pageNo) + 1;
+                console.log(pageNo);
+                $.ajax({
+                    type: "GET",
+                    url: "https://sandbox.pranavdev.space/gadgets/api/products/",
+                    data: { page: pageNo },
+                    success: function (response) {
+                        $('#nxtPage').attr('currPage', pageNo);
+
+                        if (response.status == "success") {
+                            var data = response.data;
+                            for (var i = 0; i < data.length; i++) {
+                                tabData += '<tr>';
+                                tabData += '<td>' + data[i].id + '</td>';
+                                tabData += '<td>' + data[i].name + '</td>';
+                                if (data[i].image != '') {
+                                    tabData += '<td><img src="' + data[i].image + '" height="200px" width="200px"></td>';
+                                }
+                                else {
+                                    tabData += '<td>No Image Found</td>';
+                                }
+                                tabData += '<td>' + data[i].description + '</td>';
+                                tabData += '<td>' + data[i].created_at + '</td>';
+                                tabData += '</tr>';
+                            }
+
+                            $('#tabData').html(tabData);
+
+                            var pagination = response.pagination;
+                            // console.log(pagination);
+                            // console.log(pagination.total_pages);
+                            // console.log(pagination.current_page);
+                        }
+                        else{
+                            $('#tabData').html(response.message);
+                        }
+
+                    }
+                });
+            });
+
+
+
+
+            //For search
+            $(document).on('click', '#searchBtn',function () {
+                // console.log("search btn clicked")
+                var search=$('#search').val();
+                // console.log(search);
+
+                $.ajax({
+                    type: "GET",
+                    url: "https://sandbox.pranavdev.space/gadgets/api/products/search",
+                    data: {q:search},
+                    
+                    success: function (response) {
+                       if(response.status=='success'){
+                            tabData='';
+                            data = response.data;
+                            for (var i = 0; i < data.length; i++) {
+                                tabData += '<tr>';
+                                tabData += '<td>' + data[i].id + '</td>';
+                                tabData += '<td>' + data[i].name + '</td>';
+                                if (data[i].image != '') {
+                                    tabData += '<td><img src="' + data[i].image + '" height="200px" width="200px"></td>';
+                                }
+                                else {
+                                    tabData += '<td>No Image Found</td>';
+                                }
+                                tabData += '<td>' + data[i].description + '</td>';
+                                tabData += '<td>' + data[i].created_at + '</td>';
+                                tabData += '</tr>';
+                            }
+
+                            $('#tabData').html(tabData);
+                       }
+                       else{
+                            alert(response.message);
+                       }
+                       
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
